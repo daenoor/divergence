@@ -30,15 +30,18 @@ module Divergence
       end
     end
 
+    def project_and_branch
+      if has_subdomain?
+        host_parts.reverse.drop(3)
+      end
+    end
+
     def branch
       if has_subdomain?
-        branch = subdomain
+        project, branch = project_and_branch
+        hg = HgManager.new(find_repo(project))
 
-        if branch['-']
-          @git.discover(branch)
-        else
-          branch
-        end
+        hg.discover(branch)
       else
         nil
       end

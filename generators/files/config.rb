@@ -1,7 +1,7 @@
 require File.expand_path('../callbacks', __FILE__)
 
 Divergence::Application.configure do |config|
-  config.git_path = nil   # Change this to the git repository path
+  config.projects_path = nil   # Change this to the git repository path
   config.app_path = nil   # and this to your application's path.
   config.cache_path = nil # This should be an empty directory
 

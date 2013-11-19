@@ -15,12 +15,12 @@ module Divergence
 
     # Links the application directory to the given path,
     # which is always a cache directory in our case.
-    def link!(path)
-      Application.log.info "Link: #{path} -> #{config.app_path}"
+    def link!(app_path, path)
+      Application.log.info "Link: #{path} -> #{app_path}"
 
       config.callback :before_swap, path
-      FileUtils.rm config.app_path if File.exists?(config.app_path)
-      FileUtils.ln_s path, config.app_path, :force => true
+      FileUtils.rm app_path if File.exists?(app_path)
+      FileUtils.ln_s path, app_path, :force => true
       config.callback :after_swap, config.app_path
     end
   end

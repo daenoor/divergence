@@ -7,7 +7,7 @@ module Divergence
     attr_accessor :forward_host, :forward_port
 
     def initialize
-      @git_path = nil
+      @projects_path = nil
       @app_path = nil
       @cache_path = nil
 
@@ -21,7 +21,7 @@ module Divergence
     end
 
     def ok?
-      [:git_path, :app_path, :cache_path].each do |path|
+      [:@projects_path, :app_path, :cache_path].each do |path|
         if instance_variable_get("@#{path}").nil?
           raise "Configure #{path} before running"
         end

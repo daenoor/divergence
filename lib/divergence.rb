@@ -2,6 +2,7 @@ require "rack/proxy"
 require "json"
 require "logger"
 require "fileutils"
+require "mercurial-ruby"
 
 require "rack_ssl_hack"
 require "divergence/version"
@@ -34,13 +35,31 @@ module Divergence
     def initialize
       config.ok?
 
-      @git = GitManager.new(config.git_path)
+      #@git = GitManager.new(config.git_path)
       @cache = CacheManager.new(config.cache_path, config.cache_num)
       @active_branch = ""
     end
 
     def config
       @@config
+    end
+
+    def project_path(project)
+      path = File.join(config.projects_path, project)
+      return path if FileTest.exist?(path)
+
+      path_lookup = Regexp.new(path.gsub(/-/, '.')+'$', Regexp::IGNORECASE)
+      Dir.foreach(config.projects_path) do |d|
+        return d if path_lookup.match(d)
+      end
+    end
+
+    def repo_path(project)
+      File.join(project_path(project), 'src')
+    end
+
+    def app_path(project)
+      File.join(project_path(project), 'app')
     end
   end
 end

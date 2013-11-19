@@ -20,16 +20,20 @@ module Divergence
 
       # Lets get down to business.
       begin
+        project, branch_name = @req.project_and_branch
+        hg = HgManager.new(repo_path(project))
+
         # Get the proper branch name using a touch of magic
-        branch = @git.discover(@req.subdomain)
+        branch = hg.discover(branch_name)
 
         # Prepare the branch and cache if needed
         path = prepare(branch)
+        path.inspect
         
         # If we're requesting a different branch than the
         # one currently loaded, we'll need to link it to
         # the application directory.
-        link!(path) unless path.nil?
+        link!(app_path, path) unless path.nil?
         
         @active_branch = branch
       rescue Exception => e
