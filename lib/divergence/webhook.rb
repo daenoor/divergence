@@ -19,9 +19,9 @@ module Divergence
         end
       else
         Application.log.info "Webhook: creating project #{payload['repository']['slug']}"
-        File.mkdir(path)
+        FileUtils.mkdir(path)
         Mercurial::Repository.clone('ssh://hg@bitbucket.org'+payload['repository']['absolute_url'], File.join(path, 'src'), {})
-        File.ln_s(File.join(path, 'src'), File.join(path, 'app'))
+        FileUtils.ln_s(File.join(path, 'src'), File.join(path, 'app'))
         Application.log.info "Webhook: Successfully created project #{payload['repository']['slug']}"
       end
 
