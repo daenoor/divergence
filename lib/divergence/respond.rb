@@ -33,7 +33,7 @@ module Divergence
         # If we're requesting a different branch than the
         # one currently loaded, we'll need to link it to
         # the application directory.
-        link!(app_path, path) unless path.nil?
+        link!(app_path(project), path) unless path.nil?
         
         @active_branch = branch
       rescue Exception => e
