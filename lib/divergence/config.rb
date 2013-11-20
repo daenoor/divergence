@@ -2,7 +2,7 @@ module Divergence
   class Configuration
     include Enumerable
 
-    attr_accessor :app_path, :git_path, :cache_path
+    attr_accessor :projects_path, :app_path, :git_path, :cache_path
     attr_accessor :cache_num
     attr_accessor :forward_host, :forward_port
 
