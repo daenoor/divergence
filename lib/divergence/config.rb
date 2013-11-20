@@ -27,8 +27,8 @@ module Divergence
         end
       end
 
-      unless File.exists?(@git_path)
-        raise "Configured git path not found: #{@git_path}"
+      unless File.exists?(@projects_path)
+        raise "Configured projects path not found: #{@projects_path}"
       end
 
       unless File.exists?(@cache_path)
