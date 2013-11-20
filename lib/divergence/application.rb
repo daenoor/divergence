@@ -19,7 +19,9 @@ module Divergence
       Application.log.info "Link: #{path} -> #{app_path}"
 
       config.callback :before_swap, path
+      Application.log.info "Deleting old app link"
       FileUtils.rm app_path if File.exists?(app_path)
+      Application.log.info "Creating new symlink to repo"
       FileUtils.ln_s path, app_path, :force => true
       config.callback :after_swap, config.app_path
     end

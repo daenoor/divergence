@@ -1,3 +1,3 @@
 module Divergence
-  VERSION = "0.2.1.6"
+  VERSION = "0.2.1.7"
 end
