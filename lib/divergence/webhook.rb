@@ -1,27 +1,34 @@
 module Divergence
   class Application
     def handle_webhook
-      hook = JSON.parse(@req['payload'])
-      branch = hook["ref"].split("/").last.strip
+      payload = JSON.parse(@req['payload'])
+      #branch = hook["ref"].split("/").last.strip
 
       Application.log.info "Webhook: received for #{branch} branch"
 
-      # If the webhook is for the currently active branch,
-      # then we perform a pull and a swap.
-      if @cache.is_cached?(branch)
-        Application.log.info "Webhook: updating #{branch}"
-
-        git_path = @git.switch branch, :force => true
-
-        config.callback :before_webhook, git_path, :branch => branch
-        @cache.sync branch, git_path
-        config.callback :after_webhook, @cache.path(branch), :branch => branch
-
-        ok
+      # Check if we have this project
+      # If not clone it and create required directory structure
+      # If project exists update cached branch
+      path = File.join(config.projects_path, payload['repository']['slug'])
+      if File.exists?(path)
+        payload['commits'].map { |commit| commit['branch'] }.uniq.each do |branch|
+          if @cache.is_cached?(branch)
+            Application.log.info "Webhook: updating branch #{branch} on project #{payload['repository']['slug']}"
+            config.callback :before_webhook, path, :branch => branch
+            hg = HgManager.new(path)
+            @cache.sync(branch, hg.switch(branch, force: true))
+            config.callback :after_webhook, @cache.path(branch), :branch => branch
+          end
+        end
       else
-        Application.log.info "Webhook: ignoring #{branch}"
-        ignore
+        Application.log.info "Webhook: creating project #{payload['repository']['slug']}"
+        File.mkdir(path)
+        Mercurial::Repository.clone(payload['canon_ur']+payload['repository']['absolute_url'], File.join(path, 'src'), {})
+        File.ln_s(File.join(path, 'src'), File.join(path, 'app'))
+        Application.log.info "Webhook: Successfully created project #{payload['repository']['slug']}"
       end
+
+      ok
     end
 
     def ok

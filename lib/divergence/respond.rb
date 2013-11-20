@@ -52,14 +52,15 @@ module Divergence
       
       status, header, body = perform_request(env)
 
-      Application.log.info "Header content " + header.inspect
+      # By some reason we get arrays instead of strings in headers hash
+      # So we need to convert these arrays to strings to make Rack::Lint happy
+      header.each_key do |key|
+        header[key] = header[key].first if header[key].kind_of?(Array)
+      end
 
-      # This is super weird. Not sure why there is a status
-      # header coming through, but Rack::Lint complains about
-      # it, so we just remove it. I think this might be coming
-      # from Cloudfront (if you use it).
-      if header.has_key?('Status')
-        header.delete 'Status'
+      # Remove unwanted headers
+      %w(Status status).each do |h|
+        header.delete(h) if header.has_key?(h)
       end
 
       [status, header, body]
