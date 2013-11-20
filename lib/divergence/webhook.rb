@@ -2,9 +2,6 @@ module Divergence
   class Application
     def handle_webhook
       payload = JSON.parse(@req['payload'])
-      #branch = hook["ref"].split("/").last.strip
-
-      Application.log.info "Webhook: received for #{branch} branch"
 
       # Check if we have this project
       # If not clone it and create required directory structure
