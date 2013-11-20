@@ -52,6 +52,8 @@ module Divergence
       
       status, header, body = perform_request(env)
 
+      Application.log.info "Header content " + header.inspect
+
       # This is super weird. Not sure why there is a status
       # header coming through, but Rack::Lint complains about
       # it, so we just remove it. I think this might be coming
