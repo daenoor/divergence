@@ -4,7 +4,7 @@ module Divergence
     attr_reader :current_branch
 
     def initialize(path)
-      @repo_path = git_path
+      @repo_path = path
       @repo = Mercurial::Repository.open(@repo_path)
       @log = Logger.new('./log/git.log')
       @current_branch = current_branch

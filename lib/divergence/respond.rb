@@ -21,8 +21,6 @@ module Divergence
       # Lets get down to business.
       begin
         project, branch_name = @req.project_and_branch
-        project.inspect
-        branch.inspect
         hg = HgManager.new(repo_path(project))
 
         # Get the proper branch name using a touch of magic

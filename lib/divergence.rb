@@ -9,6 +9,7 @@ require "divergence/version"
 require "divergence/config"
 require "divergence/application"
 require "divergence/git_manager"
+require 'divergence/hg_manager'
 require "divergence/cache_manager"
 require "divergence/helpers"
 require "divergence/request_parser"
