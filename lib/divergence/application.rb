@@ -7,7 +7,7 @@ module Divergence
       return nil if branch == @active_branch
 
       unless @cache.is_cached?(branch)
-        @cache.add branch, @git.switch(branch)
+        @cache.add branch, @hg.switch(branch)
       end
 
       @cache.path(branch)

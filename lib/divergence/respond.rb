@@ -21,10 +21,10 @@ module Divergence
       # Lets get down to business.
       begin
         project, branch_name = @req.project_and_branch
-        hg = HgManager.new(repo_path(project))
+        @hg = HgManager.new(repo_path(project))
 
         # Get the proper branch name using a touch of magic
-        branch = hg.discover(branch_name)
+        branch = @hg.discover(branch_name)
 
         # Prepare the branch and cache if needed
         path = prepare(branch)
