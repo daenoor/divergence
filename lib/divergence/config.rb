@@ -21,7 +21,7 @@ module Divergence
     end
 
     def ok?
-      [:@projects_path, :app_path, :cache_path].each do |path|
+      [:projects_path, :app_path, :cache_path].each do |path|
         if instance_variable_get("@#{path}").nil?
           raise "Configure #{path} before running"
         end
