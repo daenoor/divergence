@@ -38,10 +38,7 @@ module Divergence
 
     def branch
       if has_subdomain?
-        project, branch = project_and_branch
-        hg = HgManager.new(find_repo(project))
-
-        hg.discover(branch)
+        subdomain
       else
         nil
       end
